@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'my_notes/styles.css' %}">
+    <title>Login - MyNotes</title>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Login to MyNotes</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Log In</button>
+        </form>
+        <a href="{% url 'signup' %}">Don't have an account? Sign up here!</a>
+    </div>
+</body>
+
+</html>

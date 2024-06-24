@@ -1,0 +1,35 @@
+<!-- my-notes/templates/my-notes/edit_note.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'my_notes/styles.css' %}">
+    <title>Edit Note</title>
+</head>
+
+<body>
+    <h1>Edit Note</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="{{ note.title }}"><br>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content">{{ note.content }}</textarea><br>
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" value="{{ note.author }}"><br>
+        <button type="submit">Save Changes</button>
+        <nav>
+            <a href="{% url 'check' note.id %}">Cancel</a>
+        </nav>
+    </form>
+
+    <form method="POST" action="{% url 'delete' note.id %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit" class="delete-button">Delete</button>
+    </form>
+
+</body>
+
+</html>

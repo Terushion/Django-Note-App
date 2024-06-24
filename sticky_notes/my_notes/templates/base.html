@@ -1,0 +1,36 @@
+<!-- my_notes/templates/my_notes/base.html (if you use a base template) -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Notes{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'my_notes/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>{% block header %}Welcome to MyNotes!{% endblock %}</h1>
+        {% block navbar %}
+        <nav>
+            {% if user.is_authenticated %}
+                <div>
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Log Out</button>
+                    </form>
+                </div>
+            {% else %}
+                <div>
+                    <a href="{% url 'signup' %}">Sign Up</a>
+                </div>
+                <div>
+                    <a href="{% url 'login' %}">Log In</a>
+                </div>
+            {% endif %}
+        </nav>
+        {% endblock %}
+    </header>
+
+    {% block content %}{% endblock %}
+</body>
+</html>
