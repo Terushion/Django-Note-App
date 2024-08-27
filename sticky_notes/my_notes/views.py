@@ -101,6 +101,8 @@ def signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
             return redirect("login")
     else:
         form = UserCreationForm()
@@ -113,23 +115,22 @@ def login_view(request):
     :param request: HTTP request object.
     :return: Rendered login page with authentication form.
     """
-    if request.method == "POST":
-        form = AuthenticationForm(request, request.POST)
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, f"You are now logged in as {username}.")
-                return redirect("home")
+                messages.info(request, f'You are now logged in as {username}.')
+                return redirect('index')
             else:
-                messages.error(request, "Invalid username or password.")
+                messages.error(request, 'Invalid username or password.')
         else:
-            messages.error(request, "Invalid username or password.")
-    else:
-        form = AuthenticationForm()
-    return render(request, "my_notes/login.html", {"form": form})
+            messages.error(request, 'Invalid username or password.')
+    form = AuthenticationForm()
+    return render(request, 'my_notes/login.html', {'form': form})
 
 
 @login_required
@@ -150,4 +151,10 @@ def logout_view(request):
     :return: Redirect to the home page.
     """
     logout(request)
+    messages.info(request, 'You have successfully logged out.')
     return redirect("home")
+
+# def protected_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'auth_app/protected.html')
